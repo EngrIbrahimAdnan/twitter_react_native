@@ -6,6 +6,7 @@ import {
   Platform,
   StatusBar,
   Text,
+  ScrollView,
 } from "react-native";
 import {
   Avatar,
@@ -17,11 +18,11 @@ import {
 } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const ChatMessage = ({ message, time, isOwn }) => (
+import Contacts from "./data/DirectContacts.js";
+
+const ChatMessage = ({ message, time, isOwn, avatar }) => (
   <View style={[styles.messageContainer, isOwn && styles.ownMessage]}>
-    {!isOwn && (
-      <Avatar.Image size={40} source={require("./assets/profile.png")} />
-    )}
+    {!isOwn && <Avatar.Image size={40} source={{ uri: avatar }} />}
     <Surface
       style={[
         styles.messageBubble,
@@ -31,7 +32,11 @@ const ChatMessage = ({ message, time, isOwn }) => (
       <Text style={[styles.messageText, isOwn && styles.ownMessageText]}>
         {message}
       </Text>
-      <Text style={styles.timeText}>{time}</Text>
+      <Text
+        style={[styles.timeText, isOwn ? { color: "#fff" } : { color: "#666" }]}
+      >
+        {time}
+      </Text>
     </Surface>
   </View>
 );
@@ -39,6 +44,9 @@ const ChatMessage = ({ message, time, isOwn }) => (
 const ChatScreen = () => {
   const insets = useSafeAreaInsets();
   const [message, setMessage] = useState("");
+
+  const TextExp = Contacts[0].messagesLog; // Access the messagesLog of the first contact
+  const AvatarIcon = Contacts[0].avatar;
 
   return (
     <SafeAreaView
@@ -49,28 +57,23 @@ const ChatScreen = () => {
     >
       <Appbar.Header style={styles.header}>
         <Appbar.BackAction onPress={() => {}} />
-        <Avatar.Image size={40} source={require("./assets/profile.png")} />
+        <Avatar.Image size={40} source={{ uri: AvatarIcon }} />
         <Appbar.Content title="Oluwaseun olumide" />
         <Appbar.Action icon="information" onPress={() => {}} />
       </Appbar.Header>
 
-      <View style={styles.chatContainer}>
-        <ChatMessage
-          message="Kindly help me check the doc i sent"
-          time="4:25pm"
-          isOwn={false}
-        />
-        <ChatMessage message="Donee" time="4:25pm" isOwn={true} />
-        <ChatMessage message="How did you see it" time="4:25pm" isOwn={false} />
-        <ChatMessage message="It's okay" time="4:25pm" isOwn={true} />
-        <ChatMessage message="It makes sense" time="4:25pm" isOwn={true} />
-        <ChatMessage message="Thanks very much" time="4:25pm" isOwn={false} />
-        <ChatMessage
-          message="I really appreciate"
-          time="4:25pm"
-          isOwn={false}
-        />
-      </View>
+      <ScrollView style={styles.chatContainer}>
+        {/* <Text>{TextExp}</Text> */}
+        {TextExp.map((log) => (
+          <ChatMessage
+            key={log.id}
+            message={log.message}
+            time={log.time}
+            isOwn={!log.fromContact} // Assuming "own" messages are those not from the contact
+            avatar={AvatarIcon} // Assuming "own" messages are those not from the contact
+          />
+        ))}
+      </ScrollView>
 
       <Surface style={styles.inputContainer}>
         <View style={styles.inputRow}>
