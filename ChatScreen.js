@@ -18,7 +18,11 @@ import {
 } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useNavigation } from "@react-navigation/native";
+
 import Contacts from "./data/DirectContacts.js";
+
+import { useRef } from "react";
 
 const ChatMessage = ({ message, time, isOwn, avatar }) => (
   <View style={[styles.messageContainer, isOwn && styles.ownMessage]}>
@@ -41,28 +45,46 @@ const ChatMessage = ({ message, time, isOwn, avatar }) => (
   </View>
 );
 
-const ChatScreen = () => {
+const ChatScreen = ({ route }) => {
+  const navigation = useNavigation();
+
+  const { ContactID } = route.params;
+
   const insets = useSafeAreaInsets();
   const [message, setMessage] = useState("");
 
-  const TextExp = Contacts[0].messagesLog; // Access the messagesLog of the first contact
-  const AvatarIcon = Contacts[0].avatar;
+  const TextExp = Contacts[ContactID - 1].messagesLog; // Access the messagesLog of the first contact
+  const AvatarIcon = Contacts[ContactID - 1].avatar;
+  const scrollViewRef = useRef();
 
   return (
     <SafeAreaView
       style={[
         styles.container,
-        { paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0 },
+        {
+          paddingTop:
+            Platform.OS === "android" ? StatusBar.currentHeight - 30 : 0,
+        },
       ]}
     >
       <Appbar.Header style={styles.header}>
-        <Appbar.BackAction onPress={() => {}} />
+        <Appbar.BackAction
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
         <Avatar.Image size={40} source={{ uri: AvatarIcon }} />
-        <Appbar.Content title="Oluwaseun olumide" />
+        <Appbar.Content title={Contacts[ContactID - 1].name} />
         <Appbar.Action icon="information" onPress={() => {}} />
       </Appbar.Header>
 
-      <ScrollView style={styles.chatContainer}>
+      <ScrollView
+        style={styles.chatContainer}
+        ref={scrollViewRef}
+        onContentSizeChange={() =>
+          scrollViewRef.current.scrollToEnd({ animated: true })
+        }
+      >
         {/* <Text>{TextExp}</Text> */}
         {TextExp.map((log) => (
           <ChatMessage
