@@ -11,6 +11,9 @@ import {
   StatusBar,
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import ROUTES from "./constants/routes.js";
+import DirectContacts from "./data/DirectContacts.js";
 
 const MessageItem = ({
   avatar,
@@ -20,7 +23,7 @@ const MessageItem = ({
   message,
   hasNewMessage,
 }) => (
-  <TouchableOpacity style={styles.messageItem}>
+  <View style={styles.messageItem}>
     <Image source={{ uri: avatar }} style={styles.avatar} />
     <View style={styles.messageContent}>
       <View style={styles.messageHeader}>
@@ -34,14 +37,14 @@ const MessageItem = ({
       </Text>
     </View>
     {hasNewMessage && <View style={styles.newMessageDot} />}
-  </TouchableOpacity>
+  </View>
 );
 
 export default function DirectMessages() {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-
       {/* Header */}
       <View style={styles.header}>
         <Image
@@ -76,80 +79,30 @@ export default function DirectMessages() {
         </TouchableOpacity>
 
         {/* Messages List */}
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="Jaco J."
-          handle="@iamjacoj"
-          time="1s"
-          message="hey! I have a friend who's headed to Kyoto, and wondered if you have..."
-          hasNewMessage={true}
-        />
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={false}
-        />
 
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={false}
-        />
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={false}
-        />
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={false}
-        />
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={false}
-        />
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={false}
-        />
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={true}
-        />
-        <MessageItem
-          avatar="https://via.placeholder.com/50"
-          name="BIP"
-          handle="@bip_kpop"
-          time="5s"
-          message="🔥"
-          hasNewMessage={true}
-        />
-        {/* Add more MessageItems as needed */}
+        {DirectContacts.map((Contact) => {
+          return (
+            <TouchableOpacity
+              key={Contact.id}
+              onPress={() =>
+                navigation.navigate(ROUTES.MESSAGES.DIRECTMESSAGES, {
+                  ContactID: Contact.id,
+                })
+              }
+            >
+              <MessageItem
+                avatar={Contact.avatar}
+                name={Contact.name}
+                handle="@iamjacoj"
+                time="1s"
+                message={
+                  Contact.messagesLog[Contact.messagesLog.length - 1].message
+                }
+                hasNewMessage={Contact.hasNewMessage}
+              />
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
 
       {/* Bottom Navigation */}

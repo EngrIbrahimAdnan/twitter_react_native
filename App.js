@@ -10,10 +10,16 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import ChatScreen from "./ChatScreen";
 import DirectMessages from "./DirectMessages";
 
+import MessagesNav from "./navigation/messages/MessagesNav.js";
+
+import { NavigationContainer } from "@react-navigation/native";
+
 const App = () => {
   return (
     <NavigationContainer>
       <PaperProvider>
+  //      <MessagesNav />
+
         {/* <ChatScreen /> */}
 //         <MainNavigation />
         {/* <HomeNavigation /> */}
