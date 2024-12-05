@@ -1,3 +1,9 @@
+import { Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ChatScreen from './ChatScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import HomeNavigation from './src/navigation/HomeNavigation';
+import MainNavigation from './src/navigation/MainNavigation';
 import React from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -10,17 +16,16 @@ import { NavigationContainer } from "@react-navigation/native";
 
 const App = () => {
   return (
-    // <SafeAreaProvider>
-    //   <PaperProvider>
-    //     <ChatScreen />
-    //     {/* <DirectMessages /> */}
-    //   </PaperProvider>
-    // </SafeAreaProvider>
-
     <NavigationContainer>
-      {/* <AuthNavigation /> */}
-      <MessagesNav />
-      {/* <OrderSummary /> */}
+      <PaperProvider>
+  //      <MessagesNav />
+
+        {/* <ChatScreen /> */}
+//         <MainNavigation />
+        {/* <HomeNavigation /> */}
+//         <ChatScreen />
+        {/* <DirectMessages /> */}
+      </PaperProvider>
     </NavigationContainer>
   );
 };
