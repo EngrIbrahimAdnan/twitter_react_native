@@ -1,15 +1,20 @@
-import React from "react";
-import { Provider as PaperProvider } from "react-native-paper";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import ChatScreen from "./ChatScreen";
+import React from 'react';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ChatScreen from './ChatScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import HomeNavigation from './src/navigation/HomeNavigation';
+import MainNavigation from './src/navigation/MainNavigation';
 
 const App = () => {
   return (
-    <SafeAreaProvider>
+    <NavigationContainer>
       <PaperProvider>
-        <ChatScreen />
+        {/* <ChatScreen /> */}
+        <MainNavigation />
+        {/* <HomeNavigation /> */}
       </PaperProvider>
-    </SafeAreaProvider>
+    </NavigationContainer>
   );
 };
 
